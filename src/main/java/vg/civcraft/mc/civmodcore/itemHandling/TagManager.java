@@ -108,7 +108,7 @@ public class TagManager {
 		List<Integer> list = new ArrayList<>();
 
 		for (int i = 0; i < tagList.size(); i++) {
-			list.add(tagList.c(i));
+			list.add(tagList.h(i));
 		}
 
 		return list;
@@ -138,7 +138,7 @@ public class TagManager {
 		List<Short> list = new ArrayList<Short>();
 
 		for (int i = 0; i < tagList.size(); i++) {
-			NBTBase base = tagList.i(i);
+			NBTBase base = tagList.c(i);
 			try {
 				Method f = base.getClass().getMethod("f");
 				Short s = (Short) f.invoke(base);
