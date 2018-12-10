@@ -7,21 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
-import net.minecraft.server.v1_12_R1.NBTBase;
-import net.minecraft.server.v1_12_R1.NBTTagByte;
-import net.minecraft.server.v1_12_R1.NBTTagByteArray;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagDouble;
-import net.minecraft.server.v1_12_R1.NBTTagFloat;
-import net.minecraft.server.v1_12_R1.NBTTagInt;
-import net.minecraft.server.v1_12_R1.NBTTagIntArray;
-import net.minecraft.server.v1_12_R1.NBTTagList;
-import net.minecraft.server.v1_12_R1.NBTTagLong;
-import net.minecraft.server.v1_12_R1.NBTTagShort;
-import net.minecraft.server.v1_12_R1.NBTTagString;
+import net.minecraft.server.v1_13_R2.NBTBase;
+import net.minecraft.server.v1_13_R2.NBTTagByte;
+import net.minecraft.server.v1_13_R2.NBTTagByteArray;
+import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagDouble;
+import net.minecraft.server.v1_13_R2.NBTTagFloat;
+import net.minecraft.server.v1_13_R2.NBTTagInt;
+import net.minecraft.server.v1_13_R2.NBTTagIntArray;
+import net.minecraft.server.v1_13_R2.NBTTagList;
+import net.minecraft.server.v1_13_R2.NBTTagLong;
+import net.minecraft.server.v1_13_R2.NBTTagShort;
+import net.minecraft.server.v1_13_R2.NBTTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class TagManager {
@@ -38,7 +38,7 @@ public class TagManager {
 			throw new IllegalArgumentException("Expected item stack parameter but NULL passed.");
 		}
 
-		net.minecraft.server.v1_12_R1.ItemStack s = CraftItemStack.asNMSCopy(is);
+		net.minecraft.server.v1_13_R2.ItemStack s = CraftItemStack.asNMSCopy(is);
 		this.tag = s.getTag();
 
 		if (this.tag == null) {
@@ -105,7 +105,7 @@ public class TagManager {
 
 	public List<Integer> getIntList(String key) {
 		NBTTagList tagList = this.tag.getList(key, 3);
-		List<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<>();
 
 		for (int i = 0; i < tagList.size(); i++) {
 			list.add(tagList.c(i));
@@ -187,7 +187,7 @@ public class TagManager {
 
 	public ItemStack enrichWithNBT(ItemStack is) {
 
-		net.minecraft.server.v1_12_R1.ItemStack s = CraftItemStack.asNMSCopy(is);
+		net.minecraft.server.v1_13_R2.ItemStack s = CraftItemStack.asNMSCopy(is);
 
 		if (s == null) {
 			log.severe("Failed to create enriched copy of " + is.toString());

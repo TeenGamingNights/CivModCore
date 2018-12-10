@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CivModCore:jar">
+    <output-path>$PROJECT_DIR$/out</output-path>
+    <root id="archive" name="CivModCore.jar">
+      <element id="module-output" name="CivModCore" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.srv/spigot.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/zaxxer/HikariCP/2.6.2/HikariCP-2.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
