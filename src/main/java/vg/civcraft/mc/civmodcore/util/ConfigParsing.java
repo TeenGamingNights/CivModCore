@@ -1,13 +1,7 @@
 package vg.civcraft.mc.civmodcore.util;
 
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.logging.Logger;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -24,7 +18,11 @@ import vg.civcraft.mc.civmodcore.areas.EllipseArea;
 import vg.civcraft.mc.civmodcore.areas.GlobalYLimitedArea;
 import vg.civcraft.mc.civmodcore.areas.IArea;
 import vg.civcraft.mc.civmodcore.areas.RectangleArea;
+import vg.civcraft.mc.civmodcore.itemHandling.ISUtils;
 import vg.civcraft.mc.civmodcore.itemHandling.ItemMap;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 public class ConfigParsing {
 
@@ -50,7 +48,7 @@ public class ConfigParsing {
 		return result;
 	}
 
-	public static ItemMap parseItemMapDirectly(ConfigurationSection current) {
+	private static ItemMap parseItemMapDirectly(ConfigurationSection current) {
 		ItemMap im = new ItemMap();
 		if (current == null) {
 			return im;
@@ -59,16 +57,12 @@ public class ConfigParsing {
 		try {
 			m = Material.valueOf(current.getString("material"));
 		} catch (IllegalArgumentException iae) {
-			m = null;
-		} finally {
-			if (m == null) {
-				log.severe("Failed to find material of section " + current.getCurrentPath());
-				return im;
-			}
+			log.severe("Failed to find material of section " + current.getCurrentPath());
+			return im;
 		}
 		ItemStack toAdd = new ItemStack(m);
 		int durability = current.getInt("durability", 0);
-		toAdd.setDurability((short) durability);
+		ISUtils.setDurability(toAdd, durability);
 		ItemMeta meta = toAdd.getItemMeta();
 		if (meta == null) {
 			log.severe("No item meta found for" + current.getCurrentPath());
@@ -93,7 +87,8 @@ public class ConfigParsing {
 				for (String enchantKey : current.getConfigurationSection("enchants").getKeys(false)) {
 					ConfigurationSection enchantConfig = current.getConfigurationSection("enchants")
 							.getConfigurationSection(enchantKey);
-					Enchantment enchant = Enchantment.getByName(enchantConfig.getString("enchant"));
+					NamespacedKey nsKeyOfEnchant = NamespacedKey.minecraft(enchantConfig.getString("enchant"));
+					Enchantment enchant = Enchantment.getByKey(nsKeyOfEnchant);
 					int level = enchantConfig.getInt("level", 1);
 					meta.addEnchant(enchant, level, true);
 				}
@@ -128,8 +123,8 @@ public class ConfigParsing {
 						ConfigurationSection currentStoredEnchantSection = storedEnchantSection
 								.getConfigurationSection(sEKey);
 						if (currentStoredEnchantSection != null) {
-							Enchantment enchant = Enchantment.getByName(currentStoredEnchantSection
-									.getString("enchant"));
+							NamespacedKey nsKeyOfEnchant = NamespacedKey.minecraft(currentStoredEnchantSection.getString("enchant"));
+							Enchantment enchant = Enchantment.getByKey(nsKeyOfEnchant);
 							int level = currentStoredEnchantSection.getInt("level", 1);
 							enchantMeta.addStoredEnchant(enchant, level, true);
 						}

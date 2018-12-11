@@ -1,14 +1,5 @@
 package vg.civcraft.mc.civmodcore.itemHandling;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.logging.Logger;
-
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagList;
 import org.bukkit.Bukkit;
@@ -19,6 +10,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * Allows the storage and comparison of itemstacks while ignoring their maximum possible stack sizes. This offers
@@ -247,7 +242,7 @@ public class ItemMap {
 	public ItemMap getStacksByMaterialDurability(Material m, int durability) {
 		ItemMap result = new ItemMap();
 		for (ItemStack is : items.keySet()) {
-			if (is.getType() == m && is.getDurability() == durability) {
+			if (is.getType() == m && ISUtils.getDurability(is) == durability) {
 				result.addItemAmount(is.clone(), items.get(is));
 			}
 		}
@@ -255,7 +250,7 @@ public class ItemMap {
 	}
 
 	public ItemMap getStacksByMaterialDurability(ItemStack is) {
-		return getStacksByMaterialDurability(is.getType(), is.getDurability());
+		return getStacksByMaterialDurability(is.getType(), ISUtils.getDurability(is));
 	}
 
 	/**
@@ -274,7 +269,7 @@ public class ItemMap {
 	public ItemMap getStacksByMaterialDurabilityEnchants(Material m, int durability, Map<Enchantment, Integer> enchants) {
 		ItemMap result = new ItemMap();
 		for (ItemStack is : items.keySet()) {
-			if (is.getType() == m && is.getDurability() == durability && is.getItemMeta() != null
+			if (is.getType() == m && ISUtils.getDurability(is) == durability && is.getItemMeta() != null
 					&& is.getItemMeta().getEnchants().equals(enchants)) {
 				result.addItemAmount(is.clone(), items.get(is));
 			}
@@ -284,10 +279,10 @@ public class ItemMap {
 
 	public ItemMap getStacksByMaterialDurabilityEnchants(ItemStack is) {
 		if (is.getItemMeta() != null) {
-			return getStacksByMaterialDurabilityEnchants(is.getType(), is.getDurability(), is.getItemMeta()
+			return getStacksByMaterialDurabilityEnchants(is.getType(), ISUtils.getDurability(is), is.getItemMeta()
 					.getEnchants());
 		} else {
-			return getStacksByMaterialDurabilityEnchants(is.getType(), is.getDurability(),
+			return getStacksByMaterialDurabilityEnchants(is.getType(), ISUtils.getDurability(is),
 					new HashMap<Enchantment, Integer>());
 		}
 	}
@@ -323,7 +318,7 @@ public class ItemMap {
 		int amount = 0;
 		for (Entry<ItemStack, Integer> entry : matSubMap.getEntrySet()) {
 			ItemStack current = entry.getKey();
-			if ((is.getDurability() == -1 || is.getDurability() == current.getDurability())
+			if ((ISUtils.getDurability(is) == -1 || ISUtils.getDurability(is) == ISUtils.getDurability(current))
 					&& is.getItemMeta().equals(current.getItemMeta())) {
 				amount += entry.getValue();
 			}
