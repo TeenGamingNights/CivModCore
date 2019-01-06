@@ -244,8 +244,7 @@ public class ConfigParsing {
 				break;
 			}
 		}
-		long result = Long.parseLong(number.toString());
-		return result;
+		return Long.parseLong(number.toString());
 	}
 
 	/**

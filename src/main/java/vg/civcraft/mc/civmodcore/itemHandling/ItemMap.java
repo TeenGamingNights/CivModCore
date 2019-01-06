@@ -24,6 +24,8 @@ import java.util.logging.Logger;
  * specify -1 as durability it will count as any given durability. When working with multiple ItemMaps this will only
  * work if all methods are executed on the instance containing items with a durability of -1.
  */
+
+@SuppressWarnings("unused")
 public class ItemMap {
 
 	private static final Logger log = Bukkit.getLogger();
@@ -47,7 +49,7 @@ public class ItemMap {
 	 * @param inv
 	 *            Inventory to base the item map on
 	 */
-	public ItemMap(Inventory inv) {
+	private ItemMap(Inventory inv) {
 		totalItems = 0;
 		update(inv);
 	}
@@ -58,7 +60,7 @@ public class ItemMap {
 	 * @param is
 	 *            ItemStack to start with
 	 */
-	public ItemMap(ItemStack is) {
+	private ItemMap(ItemStack is) {
 		items = new HashMap<>();
 		totalItems = 0;
 		addItemStack(is);
@@ -153,7 +155,7 @@ public class ItemMap {
 	 * @param stacks
 	 *            Stacks to add
 	 */
-	public void addAll(Collection<ItemStack> stacks) {
+	private void addAll(Collection<ItemStack> stacks) {
 		for (ItemStack is : stacks) {
 			if (is != null) {
 				addItemStack(is);
@@ -173,7 +175,7 @@ public class ItemMap {
 		}
 	}
 
-	public void update(Inventory inv) {
+	private void update(Inventory inv) {
 		items = new HashMap<>();
 		totalItems = 0;
 		for (int i = 0; i < inv.getSize(); i++) {
@@ -198,7 +200,7 @@ public class ItemMap {
 	 * @param amount
 	 *            Amount associated with the given ItemStack
 	 */
-	public void addItemAmount(ItemStack input, int amount) {
+	private void addItemAmount(ItemStack input, int amount) {
 		ItemStack copy = createMapConformCopy(input);
 		if (copy == null) {
 			return;
@@ -215,7 +217,7 @@ public class ItemMap {
 	 *            Material to search for
 	 * @return New ItemMap with all ItemStack and their amount whose material matches the given one
 	 */
-	public ItemMap getStacksByMaterial(Material m) {
+	private ItemMap getStacksByMaterial(Material m) {
 		ItemMap result = new ItemMap();
 		for (ItemStack is : items.keySet()) {
 			if (is.getType() == m) {
@@ -225,7 +227,7 @@ public class ItemMap {
 		return result;
 	}
 
-	public ItemMap getStacksByMaterial(ItemStack is) {
+	private ItemMap getStacksByMaterial(ItemStack is) {
 		return getStacksByMaterial(is.getType());
 	}
 
@@ -239,7 +241,7 @@ public class ItemMap {
 	 *            Durability to search for
 	 * @return New ItemMap with all ItemStack and their amount whose material and durability matches the given one
 	 */
-	public ItemMap getStacksByMaterialDurability(Material m, int durability) {
+	private ItemMap getStacksByMaterialDurability(Material m, int durability) {
 		ItemMap result = new ItemMap();
 		for (ItemStack is : items.keySet()) {
 			if (is.getType() == m && ISUtils.getDurability(is) == durability) {
@@ -266,7 +268,7 @@ public class ItemMap {
 	 * @return New ItemMap with all ItemStack and their amount whose material, durability and enchants matches the given
 	 *         one
 	 */
-	public ItemMap getStacksByMaterialDurabilityEnchants(Material m, int durability, Map<Enchantment, Integer> enchants) {
+	private ItemMap getStacksByMaterialDurabilityEnchants(Material m, int durability, Map<Enchantment, Integer> enchants) {
 		ItemMap result = new ItemMap();
 		for (ItemStack is : items.keySet()) {
 			if (is.getType() == m && ISUtils.getDurability(is) == durability && is.getItemMeta() != null
@@ -283,7 +285,7 @@ public class ItemMap {
 					.getEnchants());
 		} else {
 			return getStacksByMaterialDurabilityEnchants(is.getType(), ISUtils.getDurability(is),
-					new HashMap<Enchantment, Integer>());
+					new HashMap<>());
 		}
 	}
 
@@ -313,7 +315,7 @@ public class ItemMap {
 	 *            Exact ItemStack to search for
 	 * @return amount of items like the given stack in this map
 	 */
-	public int getAmount(ItemStack is) {
+	private int getAmount(ItemStack is) {
 		ItemMap matSubMap = getStacksByMaterial(is);
 		int amount = 0;
 		for (Entry<ItemStack, Integer> entry : matSubMap.getEntrySet()) {
@@ -329,19 +331,19 @@ public class ItemMap {
 	/**
 	 * @return How many items are stored in this map total
 	 */
-	public int getTotalItemAmount() {
+	private int getTotalItemAmount() {
 		return totalItems;
 	}
 
 	/**
 	 * @return How many unique items are stored in this map
 	 */
-	public int getTotalUniqueItemAmount() {
+	private int getTotalUniqueItemAmount() {
 		return items.keySet().size();
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<Entry<ItemStack, Integer>> getEntrySet() {
+	private Set<Entry<ItemStack, Integer>> getEntrySet() {
 		return ((HashMap<ItemStack, Integer>) items.clone()).entrySet();
 	}
 
@@ -391,11 +393,11 @@ public class ItemMap {
 
 	@Override
 	public String toString() {
-		String res = "";
+		StringBuilder res = new StringBuilder();
 		for (ItemStack is : getItemStackRepresentation()) {
-			res += is.toString() + ";";
+			res.append(is).append(";");
 		}
-		return res;
+		return res.toString();
 	}
 
 	/**
@@ -437,7 +439,7 @@ public class ItemMap {
 	 *
 	 * @return List of stacksize conform ItemStacks
 	 */
-	public LinkedList<ItemStack> getItemStackRepresentation() {
+	private LinkedList<ItemStack> getItemStackRepresentation() {
 		LinkedList<ItemStack> result = new LinkedList<>();
 		for (Entry<ItemStack, Integer> entry : getEntrySet()) {
 			ItemStack is = entry.getKey();
